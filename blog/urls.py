@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('contatto.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('calendario/', include('calendario.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('news/', include('news.urls')),
 ]
