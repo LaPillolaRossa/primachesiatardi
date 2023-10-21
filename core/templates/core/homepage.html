@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<main class="container">
+	
+	{% if request.user.is_staff %}
+	<div class="row">
+		<div class="col-md-12">
+			<p class="text-end"><a class="btn btn-sm btn-danger" href="{% url 'crea_sezione' %}">Crea Sezione</a></p>
+		</div>
+	</div>
+	{% else %}
+		<p></p>
+	{% endif %}
+	
+  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <div class="col-md-12 px-0">
+		
+		{% for articolo in ultimi_articoli %}
+			{% if forloop.first %}
+			
+      <h1 class="display-4 fst-italic text-secondary">{{ articolo.titolo }}</h1> 
+      <p class="lead my-3">{{ articolo.contenuto|safe|truncatewords:"40"}}</p>
+      <p class="lead mb-0"><a href="{{ articolo.get_absolute_url }}" class="text-white fw-bold">Continua la lettura...</a></p>
+      
+      		{% endif %}
+    </div>
+    	{% endfor %}
+  </div>
+
+	{% for articolo in random_articoli %}
+		{% if forloop.counter <= 2 %}
+			{% if forloop.first %}<div class="row mb-2">{% endif %}
+  
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+
+          <strong class="d-inline-block mb-2 text-primary">{{ articolo.sezione_appartenenza }}</strong>
+          <h3 class="mb-1 text-secondary">{{ articolo.titolo|truncatewords:"10"}}</h3>
+          <div class="mb-1 text-muted">{{ articolo.data_creazione|date:"d M Y" }}</div>
+          <p class="card-text mb-auto">Mi Piace: {{ articolo.get_total_like_articolo}}</p>
+          <a href="{{ articolo.get_absolute_url }}" class="stretched-link">Continua la lettura...</a>
+  
+        </div>
+        <div class="col-auto d-none d-lg-block">
+		  <img src="/media/acqua-1280-800.jpg" width="200" height="250"> 
+        </div>
+      </div>
+    </div>
+            	{% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+    	{% endif %}  
+	{% endfor %}
+    
+  <div class="row g-5">
+    <div class="col-md-8">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">Lista Articoli</h3>
+      
+	{% for articolo in ultimi_articoli %}
+      	{% if forloop.counter <= 20 %}
+      	<div class="mt-2 text-end">
+		{% if request.user.is_staff %}
+			<a class="btn btn-sm btn-danger" href="{% url 'aggiorna_articolo' pk=articolo.pk %}">Aggiorna Articolo</a>
+		{% endif %}
+		</div>
+      	<h2 class="text-danger">{{ articolo.titolo }}</h2>
+      	<p>{{ articolo.autore_articolo }}</p>
+		<p>{{ articolo.data_creazione|date:"d M Y" }}</p>
+		<p>{{ articolo.contenuto|safe|truncatewords_html:30  }}</p>
+		<p class="lead mb-0"><a href="{{ articolo.get_absolute_url }}" class="text-black fw-bold">Continua la lettura...</a></p>
+		<hr>
+		{% endif %}
+	{% endfor %}
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="p-4 mb-3 bg-light rounded">
+          <h4 class="fst-italic">Chi siamo</h4>
+          <p class="mb-0">Un piccolo spazio di cultura, libertà e passione in questo mondo malato.</p>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Archivio</h4>
+          <ol class="list-unstyled mb-0">
+
+		  <li>2009
+		{% for articolo in archivio_2009 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+           <li>2010
+		{% for articolo in archivio_2010 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+           <li>2011
+		{% for articolo in archivio_2011 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+           <li>2012
+		{% for articolo in archivio_2012 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+           <li>2013
+		{% for articolo in archivio_2013 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+           <li>2014
+		{% for articolo in archivio_2014 %}
+            <ul>
+				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
+			</ul>
+		{% endfor %}   
+           </li>
+          </ol>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Contatti</h4>
+          <ol class="list-unstyled">
+            <li><a href="https://t.me/PrimaCheSiaTardi">Telegram</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="blog-footer mx-4">
+  <p><a href="/">Back to top</a></p>
+</footer>
+
+
+{% endblock content %}

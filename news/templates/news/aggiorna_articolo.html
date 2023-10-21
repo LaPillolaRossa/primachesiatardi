@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - Aggiorna Articolo{% endblock head_title %}
+
+{% block content %}
+
+	<div class="row mt-4 justify-content-center">
+		<div class="col-8">
+			<h2 class="text-center">Aggiorna Articolo</h2>
+			<form class="" method="POST" enctype="multipart/form-data" novalidate>
+				{% csrf_token %}
+				{{ form.media }}
+				{{ form|crispy }}
+			<div class="container text-center mb-2">
+				<input type="submit" class="btn btn-info" value="Aggiorna!">	
+			</div>
+			</form>
+		</div>
+	</div>
+		
+{% endblock content %}

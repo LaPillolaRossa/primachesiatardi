@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - {{ articolo.titolo }}{% endblock head_title %}
+
+{% block content %}
+
+	<div class="container">
+		
+		{% if request.user.is_staff %}
+			<div class="card-body pl-0 mt-2 text-end">
+				<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' articolo.pk %}">Aggiorna Articolo</a>
+			</div>
+		{% endif %}
+		
+		<div class="clearfix mt-2">
+			
+			{% if articolo.immagine %}
+				<img src="{{ articolo.immagine.url }}" class="col-md-6 float-md-end mb-3 ms-md-3" alt="...">
+			{% else %}			
+				
+			{% endif %}
+			
+			<hr><p>{{ articolo.data_creazione }}</p>
+			<p>Pubblicato da <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p><hr>
+			<h1>{{ articolo.titolo }}</h1>
+
+			<p class="text-body-secondary">{{ articolo.contenuto|safe }}</p>
+		</div>
+		{% if request.user.is_authenticated %}
+	  		<form action="{% url 'aggiungi_mipiace_articolo' articolo.pk %}" method="POST">
+	    {% csrf_token %}
+	    	{% if articolo_è_piaciuto %}
+	    		<button type="submit" name="articolo_id" value="{{ articolo.id }}" class="btn btn-outline-info">Non Mi Piace</button>
+	    	{% else %}
+	    		<button type="submit" name="articolo_id" value="{{ articolo.id }}" class="btn btn-outline-info">Mi Piace</button>
+	    	{% endif %}
+	  		</form>
+		{% else %}
+	  		<!--<a class="btn btn-outline-info" href="{% url 'login' %}?next={{ request.get_full_path }}">Effettua il login per mettere mi piace all'articolo!</a>--><br>
+		{% endif %}
+		<br>
+		<button type="button" class="btn btn-info position-relative">
+	  		Mi Piace
+	  		<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+	    		{{ numero_di_like_articolo }}
+	    	<span class="visually-hidden">unread messages</span>
+	 		</span>
+		</button>		
+		
+		{% for commento in commenti %}
+			<div class="card my-3">
+					<div class="card-header py-0">
+						<p class="text-muted mb-0">
+							{{ commento.data_creazione|date:"d M Y" }} 
+							{% if request.user == commento.autore_commento %}
+								<a href="{% url 'cancella_commento' id=articolo.pk pk=commento.pk %}">|<i class="fas fa-minus-circle"></i></a>
+							{% endif %}				
+						</p>
+					</div>							
+				<div class="card-body">
+					<div class="row">
+						<div class="col-xl-2 col-4">
+							<p class="mb-0"><a href="{% url 'user_profile' username=commento.autore_commento.username %}"><strong>{{ commento.autore_commento }}</strong></a></p>
+							<p class="text-muted mb-0">Utente da: {{ commento.autore_commento.date_joined|date:"M Y" }}</p>
+							<p class="text-muted mb-0">Commenti: {{ commento.autore_commento.commenti.count }}</p>
+						</div>
+						<div class="col-xl-10 col-8">
+							<p class="my-0">{{ commento.contenuto|linebreaks }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		{% endfor %}
+			
+			<div class="text-end">
+			    <span class="step-links">
+			        {% if commenti.has_previous %}
+			            <a href="?pagina=1">&laquo; prima</a>
+			            <a href="?pagina={{ commenti.previous_page_number }}">precedente</a>
+			        {% endif %}
+			
+			        <span class="current">
+			            Pagina {{ commenti.number }} di {{ commenti.paginator.num_pages }}.
+			        </span>
+			
+			        {% if commenti.has_next %}
+			            <a href="?pagina={{ commenti.next_page_number }}">successiva</a>
+			            <a href="?pagina={{ commenti.paginator.num_pages }}">ultima &raquo;</a>
+			        {% endif %}
+		    	</span>
+			</div>
+		
+			{% if request.user.is_authenticated %}
+				{% include 'news/form_risposta.html' %}
+			{% else %}
+				<div class="alert alert-info" role="alert">
+		  			Per poter commentare o aggiungere mi piace devi prima effettuare il <a href="{% url 'login' %}?next={{ request.get_full_path }}">login</a>
+				</div>
+			{% endif %}
+
+	</div>
+	
+{% endblock content %}
