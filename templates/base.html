@@ -1,4 +1,5 @@
 {% load static %}
+{% load cookie_consent_tags %}
 <!doctype html>
 <html lang="it">
   <head>
@@ -10,12 +11,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">   
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    
+    <!-- Favicon -->
+	<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+	
+	<!-- Cookie-Consent -->
+	<style type="text/css" media="screen">
+	
+	body.with-cookie-bar {
+	
+	padding-top: 25px;
+	
+	}
+	
+	.cookie-bar {
+	
+	position: fixed;
+	
+	width: 100%;
+	
+	top:0;
+	
+	text-align:center;
+	
+	height:25px;
+	
+	line-height: 20px;
+	
+	background: #ffff00;
+	
+	}
+	
+	</style>
+	
   </head>
   <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="/">PRIMA CHE SIA TARDI</a>
+        <!--<a class="navbar-brand" href="/"><img src="{% static 'logo.png' %}" class="logo-sm"></a>-->
         <button
           class="navbar-toggler"
           type="button"
@@ -97,8 +132,6 @@
       <a class="p-2 link-secondary" href="#">Massoneria</a>
       <a class="p-2 link-secondary" href="#">Tecnologia</a>
       <a class="p-2 link-secondary" href="#">Pedofilia</a>
-      <a class="p-2 link-secondary" href="#">Cultura</a>
-      <a class="p-2 link-secondary" href="#">Politica</a>
       <a class="p-2 link-secondary" href="#">Scienza</a>
       <a class="p-2 link-secondary" href="#">Salute</a>
     </nav>
@@ -109,6 +142,93 @@
 		
 		{% endblock content %}
 		
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Cookie-Consent -->
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+
+	<script type="text/javascript" src="{% static "cookie_consent/cookiebar.js" %}"></script>
+
+	
+	
+	{% if request|cookie_consent_enabled %}
+	
+	{% not_accepted_or_declined_cookie_groups request as cookie_groups %} 
+	
+	{% if cookie_groups %}
+	
+	{% url "cookie_consent_cookie_group_list" as url_cookies %}
+	
+	{% cookie_consent_accept_url cookie_groups as url_accept %}
+	
+	{% cookie_consent_decline_url cookie_groups as url_decline %}
+	
+	<
+	<script type="text/javascript">
+	
+	var cookie_groups = [];
+	
+	{% for cookie_group in cookie_groups %}
+	
+	cookie_groups.push("{{ cookie_group.varname }}");
+	
+	{% endfor %}
+	
+	function ready(fn) {
+	
+	if (document.readyState != 'loading') {
+	
+	fn();
+	
+	} else if (document.addEventListener) {
+	
+	document.addEventListener('DOMContentLoaded', fn);
+	
+	} else {
+	
+	document.attachEvent('onreadystatechange', function() {
+	
+	if (document.readyState != 'loading')
+	
+	fn();
+	
+	});
+	
+	}
+	
+	}
+	
+	
+	ready(function() {
+	
+	showCookieBar({
+	
+	content: "{% filter escapejs %}{% with cookie_groups=cookie_groups|join:", " %}<div class="cookie-bar">Questo sito utilizza alcuni tipi di cookies per migliorare le performance del sito stesso e la user experience. Sei d'accordo? <a href="{{ url_accept }}" class="cc-cookie-accept">Accetto</a> <a href="{{ url_decline }}" class="cc-cookie-decline">Rifiuto</a> <a href="{{ url_cookies }}">Informazioni sui Cookie</a></div>{% endwith %}{% endfilter %}",
+	
+	cookie_groups: cookie_groups,
+	
+	cookie_decline: "{% get_decline_cookie_groups_cookie_string request cookie_groups %}",
+	
+	beforeDeclined: function() {
+	
+	document.cookie = "{% get_decline_cookie_groups_cookie_string request cookie_groups %}";
+	
+	}
+	
+	
+	
+	});
+	
+	});
+	
+	
+	</script>
+	
+	{% endif %}
+	{% endif %}	
+    
   </body>
 </html>
+
+

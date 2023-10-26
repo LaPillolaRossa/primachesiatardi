@@ -52,7 +52,6 @@ class Migration(migrations.Migration):
                 ('data_creazione', models.DateTimeField(auto_now_add=True)),
                 ('articolo', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='news.articolo')),
                 ('autore_commento', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commenti', to=settings.AUTH_USER_MODEL)),
-                ('like_commento', models.ManyToManyField(related_name='likes_commenti', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'Commento',

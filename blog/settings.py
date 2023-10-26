@@ -46,7 +46,10 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'core',
+    'cookie_consent',
     'news',
+    
+    
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -88,11 +91,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 BASE_DIR / 'accounts/templates',
-                 BASE_DIR / 'calendario/templates',
-                 BASE_DIR / 'contatto/templates',
-                 BASE_DIR / 'core/templates',
-                 BASE_DIR / 'news/templates',],
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -183,7 +182,11 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATICFILES_DIRS = [BASE_DIR / 'static-storage']
+STATICFILES_DIRS = [
+    
+    BASE_DIR / 'static-storage',
+    BASE_DIR / 'calendario' / 'static-storage',
+]
 
 STATIC_URL = 'static/'
 
@@ -192,6 +195,7 @@ MEDIA_ROOT = BASE_DIR / 'media-serve/'
 MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = "/"
+
 
 
 # Default primary key field type
