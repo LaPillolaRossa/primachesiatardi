@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load hitcount_tags %}
 
 {% block head_title %}{{ block.super }} - {{ articolo.titolo }}{% endblock head_title %}
 
@@ -15,16 +16,16 @@
 		
 		<div class="clearfix mt-2">
 			
+			<hr><p>{{ articolo.data_creazione }}</p>
+			<p>Pubblicato da <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p>
+			<p class="card-text mb-auto">Visualizzazioni: {% get_hit_count for articolo %}</p><hr>
 			{% if articolo.immagine %}
-				<img src="{{ articolo.immagine.url }}" class="col-md-6 float-md-end mb-3 ms-md-3" alt="...">
+				<img src="{{ articolo.immagine.url }}" class="col-md-5 float-md-end mb-3 ms-md-3" style="width:100%" alt="...">
+				<hr>
 			{% else %}			
 				
 			{% endif %}
-			
-			<hr><p>{{ articolo.data_creazione }}</p>
-			<p>Pubblicato da <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p><hr>
 			<h1>{{ articolo.titolo }}</h1>
-
 			<p class="text-body-secondary">{{ articolo.contenuto|safe }}</p>
 		</div>
 		{% if request.user.is_authenticated %}

@@ -9,6 +9,7 @@ from .forms import ArticoloModelForm, CommentoModelForm
 from .mixins import StaffMixing
 from .models import Articolo, Commento, Sezione
 
+
 # Create your views here.
 
     
@@ -17,11 +18,6 @@ def visualizza_sezione(request, pk):
     articoli_sezione = Articolo.objects.filter(sezione_appartenenza=sezione).order_by("-data_creazione")
     context = {"sezione": sezione, "articoli": articoli_sezione}
     return render(request, "news/singola_sezione.html", context)
-
-def lista_sezioni(request):
-    sezioni = Sezione.objects.all().order_by("nome_sezione")
-    context = {"sezioni": sezioni}
-    return render(request, "news/sezioni.html", context)
     
 
 class CreaSezione(StaffMixing, CreateView):

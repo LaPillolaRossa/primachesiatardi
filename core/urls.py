@@ -8,4 +8,6 @@ urlpatterns = [
     path('manifesto/', views.manifesto_view, name="manifesto"),
     path('user/<str:username>/', views.user_profile_view, name="user_profile"),
     path('cerca/', views.cerca, name="funzione_cerca"),
+    path('cookies/', views.cookies_view, name="cookies"),
+    
 ]

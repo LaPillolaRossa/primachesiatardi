@@ -20,24 +20,26 @@
 				<table class="table mt-3">
 					<thead>
 						<tr class="row">
-							<th class="col-lg-6 col-4">Titolo</th>
-							<th class="col-lg-2 col-3">Autore</th>
-							<th class="col-lg-2 col-2">Commenti</th>
-							<th class="col-lg-2 col-3">Ultimo Commento</th>
+							<th class="col-lg-6 col-3"><p class="h6"><b>Titolo</b></p></th>
+							<th class="col-lg-2 col-3 px-0"><p class="h6 text-center"><b>Autore</b></p></th>
+							<th class="col-lg-2 col-3 px-0"><p class="h6 text-center"><b>Commenti</b></p></th>
+							<th class="col-lg-2 col-3"><p class="h6 text-center"><b>Ultimo Commento</b></p></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr class="row">
 							{% for articolo in articoli %}
-								<td class="col-lg-6 col-4"><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></td>
-								<td class="col-lg-2 col-3"><a href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></td>
-								<td class="col-lg-2 col-2">{{ articolo.commento_set.count }}</td>
+								<td class="col-lg-6 col-3"><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></td>
+								<td class="col-lg-2 col-3 px-0"><a href="{% url 'user_profile' username=articolo.autore_articolo.username %}"><p class="text-center">{{ articolo.autore_articolo }}</p></a></td>
+								<td class="col-lg-2 col-3 px-0"><p class="text-center">{{ articolo.commento_set.count }}</p></td>
 								<td class="col-lg-2 col-3">
+								<p class="text-center">
 								{% if articolo.commento_set.last.data_creazione|timesince %} 
 									{{ articolo.commento_set.last.data_creazione|timesince }} fa 
 								{% else %}
-									<p>-</p>
+									<p class="text-center">-</p>
 								{% endif %}
+								</p>
 								</td>
 							{% endfor %}
 						</tr>

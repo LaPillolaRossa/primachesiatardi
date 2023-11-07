@@ -27,9 +27,9 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('calendario/', include('calendario.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path("cookies/", include("cookie_consent.urls")),
     path('news/', include('news.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

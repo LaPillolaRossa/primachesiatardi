@@ -6,7 +6,7 @@
 	
 	{% if request.user.is_staff %}
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 my-2">
 			<p class="text-end"><a class="btn btn-sm btn-danger" href="{% url 'crea_sezione' %}">Crea Sezione</a></p>
 		</div>
 	</div>
@@ -62,7 +62,7 @@
       <h3 class="pb-4 mb-4 fst-italic border-bottom">Lista Articoli</h3>
       
 	{% for articolo in ultimi_articoli %}
-      	{% if forloop.counter <= 20 %}
+      	{% if forloop.counter <= 50 %}
       	<div class="mt-2 text-end">
 		{% if request.user.is_staff %}
 			<a class="btn btn-sm btn-danger" href="{% url 'aggiorna_articolo' pk=articolo.pk %}">Aggiorna Articolo</a>

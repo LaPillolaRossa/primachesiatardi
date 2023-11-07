@@ -3,6 +3,10 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 import math
+
+from hitcount.models import HitCountMixin, HitCount
+from django.contrib.contenttypes.fields import GenericRelation
+
 # Create your models here.
 
 class Sezione(models.Model):
@@ -22,7 +26,7 @@ class Sezione(models.Model):
         return reverse("sezione_view", kwargs={"pk": self.pk})
     
     def get_last_articles(self):
-        return Articolo.objects.filter(sezione_appartenenza=self).order_by("-data_creazione")[:2]
+        return Articolo.objects.filter(sezione_appartenenza=self).order_by("-data_creazione")[:10]
     
     def get_number_of_comments_in_section(self):
         return Commento.objects.filter(articolo__sezione_appartenenza=self).count()
@@ -32,7 +36,7 @@ class Sezione(models.Model):
         verbose_name_plural = "Sezioni"
         
         
-class Articolo(models.Model):
+class Articolo(models.Model, HitCountMixin):
     titolo = models.CharField(max_length=250)
     contenuto = RichTextUploadingField(blank=True, null=True)
     immagine = models.ImageField(blank=True, null=True)
@@ -40,6 +44,7 @@ class Articolo(models.Model):
     autore_articolo = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articoli")
     sezione_appartenenza = models.ForeignKey(Sezione, on_delete=models.CASCADE, blank=True, null=True)
     like_articolo = models.ManyToManyField(User, related_name="likes_articoli")
+    hit_count_generic = GenericRelation(HitCount, object_id_field='object_p', related_query_name='hit_count_generic_relation')
     
     def __str__(self):
         return self.titolo
@@ -54,7 +59,7 @@ class Articolo(models.Model):
     
     def get_total_like_articolo(self):
         return self.like_articolo.count()
-    
+        
     
     class Meta:
         verbose_name = "Articolo"

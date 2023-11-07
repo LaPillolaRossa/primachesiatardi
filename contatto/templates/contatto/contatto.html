@@ -13,7 +13,7 @@
 				<form class="" method="POST" enctype="multipart/form-data" novalidate>
 					{% csrf_token %}
 					{{ form|crispy }}
-					<input type="submit" class="btn btn-info" value="INVIA!">
+					<input type="submit" class="btn btn-info my-2" value="INVIA!">
 					<input type="hidden" name="next" value="{{ next }}">
 				</form>
 			</div>

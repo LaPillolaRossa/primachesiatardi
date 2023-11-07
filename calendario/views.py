@@ -1,21 +1,21 @@
 from calendario.models import Events 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from django.http import JsonResponse 
-from django.utils import timezone
 
 # Create your views here.
 
-now = timezone.now()
+def staff_required(login_url=None):
+    return user_passes_test(lambda u: u.is_staff, login_url=login_url)
 
 
-@login_required
+@staff_required()
 def calendario(request):
     all_events = Events.objects.all()
     context = {"events": all_events}
     return render(request, "calendario/calendario.html", context)
 
-@login_required
+@staff_required()
 def all_events(request):
     all_events = Events.objects.all()
     out = []
@@ -28,7 +28,7 @@ def all_events(request):
             })
     return JsonResponse(out, safe=False)
 
-@login_required
+@staff_required()
 def add_event(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
@@ -38,7 +38,7 @@ def add_event(request):
     data = {}
     return JsonResponse(data)
 
-@login_required
+@staff_required()
 def update(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
@@ -52,7 +52,7 @@ def update(request):
     data = {}
     return JsonResponse(data)
 
-@login_required
+@staff_required()
 def remove(request):
     id = request.GET.get("id", None)
     event = Events.objects.get(id=id)

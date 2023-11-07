@@ -1,8 +1,26 @@
+import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse
 from news.models import Articolo, Commento, Sezione
 import random
 # Create your views here.
+
+
+def record_view(request, pk):
+
+    articolo = get_object_or_404(Articolo, pk=pk)
+
+    if not Articolo.objects.filter(
+                    articolo=articolo,
+                    session=request.session.session_key):
+        view = Articolo(articolo=articolo,
+                            ip=request.META['REMOTE_ADDR'],
+                            data_creazione=datetime.datetime.now(),
+                            session=request.session.session_key)
+        view.save()
+
+    return HttpResponse(u"%s" % Articolo.objects.filter(articolo=articolo).count())
 
     
 def homepageview(request):
@@ -26,7 +44,7 @@ def homepageview(request):
                "archivio_2011": archivio_2011, 
                "archivio_2012": archivio_2012, 
                "archivio_2013": archivio_2013, 
-               "archivio_2014": archivio_2014
+               "archivio_2014": archivio_2014,
     }
     return render(request, "core/homepage.html", context)
 
@@ -52,5 +70,7 @@ def cerca(request):
         return render(request, "core/cerca.html", context)
     else:
         return render(request, "core/cerca.html")
-    
+
+def cookies_view(request):
+    return render(request, "cookies/cookies.html")
 
