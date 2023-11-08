@@ -65,7 +65,8 @@
       	{% if forloop.counter <= 50 %}
       	<div class="mt-2 text-end">
 		{% if request.user.is_staff %}
-			<a class="btn btn-sm btn-danger" href="{% url 'aggiorna_articolo' pk=articolo.pk %}">Aggiorna Articolo</a>
+			<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' slug=articolo.slug %}">Aggiorna</a>
+			<a class="btn btn-sm btn-danger mt-2" href="{% url 'cancella_articolo' articolo.slug %}">Elimina</a>
 		{% endif %}
 		</div>
       	<h2 class="text-danger">{{ articolo.titolo }}</h2>

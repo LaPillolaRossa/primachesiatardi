@@ -10,7 +10,8 @@
 		
 		{% if request.user.is_staff %}
 			<div class="card-body pl-0 mt-2 text-end">
-				<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' articolo.pk %}">Aggiorna Articolo</a>
+				<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' articolo.slug %}">Aggiorna</a>
+				<a class="btn btn-sm btn-danger mt-2" href="{% url 'cancella_articolo' articolo.slug %}">Elimina</a>
 			</div>
 		{% endif %}
 		
@@ -29,12 +30,12 @@
 			<p class="text-body-secondary">{{ articolo.contenuto|safe }}</p>
 		</div>
 		{% if request.user.is_authenticated %}
-	  		<form action="{% url 'aggiungi_mipiace_articolo' articolo.pk %}" method="POST">
+	  		<form action="{% url 'aggiungi_mipiace_articolo' articolo.slug %}" method="POST">
 	    {% csrf_token %}
 	    	{% if articolo_è_piaciuto %}
-	    		<button type="submit" name="articolo_id" value="{{ articolo.id }}" class="btn btn-outline-info">Non Mi Piace</button>
+	    		<button type="submit" name="articolo_id" value="{{ articolo.slug }}" class="btn btn-outline-info">Non Mi Piace</button>
 	    	{% else %}
-	    		<button type="submit" name="articolo_id" value="{{ articolo.id }}" class="btn btn-outline-info">Mi Piace</button>
+	    		<button type="submit" name="articolo_id" value="{{ articolo.slug }}" class="btn btn-outline-info">Mi Piace</button>
 	    	{% endif %}
 	  		</form>
 		{% else %}

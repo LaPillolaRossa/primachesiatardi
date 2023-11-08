@@ -6,7 +6,7 @@ import math
 
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
-
+from django.utils.text import slugify
 # Create your models here.
 
 class Sezione(models.Model):
@@ -37,20 +37,21 @@ class Sezione(models.Model):
         
         
 class Articolo(models.Model, HitCountMixin):
-    titolo = models.CharField(max_length=250)
+    titolo = models.CharField(max_length=255)
     contenuto = RichTextUploadingField(blank=True, null=True)
     immagine = models.ImageField(blank=True, null=True)
     data_creazione = models.DateTimeField(auto_now_add=True)
     autore_articolo = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articoli")
     sezione_appartenenza = models.ForeignKey(Sezione, on_delete=models.CASCADE, blank=True, null=True)
     like_articolo = models.ManyToManyField(User, related_name="likes_articoli")
-    hit_count_generic = GenericRelation(HitCount, object_id_field='object_p', related_query_name='hit_count_generic_relation')
+    hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
+    slug = models.SlugField(max_length=255, null=True)
     
     def __str__(self):
         return self.titolo
     
     def get_absolute_url(self):
-        return reverse("visualizza_articolo", kwargs={"pk": self.pk})
+        return reverse("visualizza_articolo", kwargs={"slug": self.slug})
     
     def get_n_pages(self):
         commenti = self.commento_set.count()
@@ -59,8 +60,12 @@ class Articolo(models.Model, HitCountMixin):
     
     def get_total_like_articolo(self):
         return self.like_articolo.count()
-        
     
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = slugify(self.titolo)
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = "Articolo"
         verbose_name_plural = "Articoli"

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     
     'crispy_forms',
     'crispy_bootstrap5',
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     
     
 ]
+
+SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 

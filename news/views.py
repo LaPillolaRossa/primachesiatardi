@@ -27,10 +27,10 @@ class CreaSezione(StaffMixing, CreateView):
     success_url = "/"
 
 
-def visualizza_articolo(request, pk):
-    articolo = get_object_or_404(Articolo, pk=pk)
+def visualizza_articolo(request, slug):
+    articolo = get_object_or_404(Articolo, slug=slug)
     commenti_articolo = Commento.objects.filter(articolo=articolo)
-    likes_connected = get_object_or_404(Articolo, pk=pk)
+    likes_connected = get_object_or_404(Articolo, slug=slug)
     numero_di_like_articolo = likes_connected.get_total_like_articolo()
     like_articolo = False
     if likes_connected.like_articolo.filter(id=request.user.id).exists():
@@ -70,15 +70,22 @@ def crea_articolo(request, pk):
 class AggiornaArticolo(StaffMixing, UpdateView):
     model = Articolo
     template_name = "news/aggiorna_articolo.html"
-    fields = ['titolo', 'contenuto', 'immagine', "autore_articolo", "sezione_appartenenza"]
+    fields = ['titolo', 'contenuto', 'immagine', "autore_articolo", "sezione_appartenenza", "slug"]
     
     def get_success_url(self):
         articolo = self.object
-        return reverse("visualizza_articolo", kwargs={"pk": articolo.id})
+        return reverse("visualizza_articolo", kwargs={"slug": articolo.slug})
+    
+class CancellaArticolo(StaffMixing, DeleteView):
+    model = Articolo
+    
+    def get_success_url(self):
+        return reverse("homepage")
+    
 
 @login_required
-def aggiungi_commento(request, pk):
-    articolo = get_object_or_404(Articolo, pk=pk)
+def aggiungi_commento(request, slug):
+    articolo = get_object_or_404(Articolo, slug=slug)
     if request.method == "POST":
         form = CommentoModelForm(request.POST)
         if form.is_valid():
@@ -87,7 +94,7 @@ def aggiungi_commento(request, pk):
             form.instance.autore_commento = request.user
             form.save()
             
-            url_articolo = reverse("visualizza_articolo", kwargs={"pk": pk})
+            url_articolo = reverse("visualizza_articolo", kwargs={"slug": slug})
             pagine_in_articolo = articolo.get_n_pages()
             if pagine_in_articolo > 1:
                 success_url = url_articolo + "?pagina=" + str(pagine_in_articolo)               
@@ -109,12 +116,12 @@ class CancellaCommento(DeleteView):
     
     def get_success_url(self):
         articolo = self.object.articolo
-        return reverse("visualizza_articolo", kwargs={"pk": articolo.id})
+        return reverse("visualizza_articolo", kwargs={"slug": articolo.slug})
     
       
-def aggiungi_like_articolo(request, pk):
-    articolo = get_object_or_404(Articolo, pk=pk)
-    url_articolo = reverse("visualizza_articolo", kwargs={"pk": pk})
+def aggiungi_like_articolo(request, slug):
+    articolo = get_object_or_404(Articolo, slug=slug)
+    url_articolo = reverse("visualizza_articolo", kwargs={"slug": slug})
     if articolo.like_articolo.filter(id=request.user.id).exists():
         articolo.like_articolo.remove(request.user)
     else:

@@ -9,6 +9,7 @@ class ArticoloModelAdmin(admin.ModelAdmin):
     list_display = ["titolo", "sezione_appartenenza", "autore_articolo"]
     search_fields = ["titolo", "autore_articolo__username"]
     list_filter = ["sezione_appartenenza", "data_creazione"]
+    prepopulated_fields = {"slug": ("titolo",)}
     
 class CommentoModelAdmin(admin.ModelAdmin):
     model = Commento
