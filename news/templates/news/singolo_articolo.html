@@ -4,6 +4,18 @@
 
 {% block head_title %}{{ block.super }} - {{ articolo.titolo }}{% endblock head_title %}
 
+{% block meta %}
+	<meta name="description" content="{{ articolo.contenuto|truncatewords_html:'120' }}">
+    <meta name="keywords" content="Blog, Prima che sia tardi, Contattaci, Manifesto, Sezione,  Massoneria, Massone, Economia, Potere, Politica, Pensieri, Euro, Linux, Costituzione, Stati, Governo, Gioele Magaldi, Renzi, Letta, Berlusconi">
+	<meta name="author" content="Prima che sia tardi">
+	<meta property="og:title" content="{{ articolo.titolo }}">
+	<meta property="og:description" content="{{ articolo.contenuto|truncatewords_html:'120' }}">
+	<meta property="og:type" content="articolo">
+	<meta property="og:url" content="http://127.0.0.1:8000{{ articolo.get_absolute_url }}">
+	{% if articolo.immagine %}
+	<meta property="og:image" content="http://127.0.0.1:8000{{ articolo.immagine.url }}">
+	{% endif %}
+{% endblock %}
 {% block content %}
 
 	<div class="container">
@@ -21,7 +33,7 @@
 			<p>Pubblicato da <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p>
 			<p class="card-text mb-auto">Visualizzazioni: {% get_hit_count for articolo %}</p><hr>
 			{% if articolo.immagine %}
-				<img src="{{ articolo.immagine.url }}" class="col-md-5 float-md-end mb-3 ms-md-3" style="width:100%" alt="...">
+				<img src="{{ articolo.immagine.url }}" class="col-md-5 float-md-end mb-3 ms-md-3" style="width:100%" alt="{{ articolo.titolo }}">
 				<hr>
 			{% else %}			
 				

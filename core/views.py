@@ -35,16 +35,17 @@ def homepageview(request):
     archivio_2012 = Articolo.objects.filter(data_creazione__year = 2012)
     archivio_2013 = Articolo.objects.filter(data_creazione__year = 2013)
     archivio_2014 = Articolo.objects.filter(data_creazione__year = 2014)
-    context = {"lista_articoli": lista_articoli, 
-               "sezioni": sezioni, 
-               "ultimi_articoli": ultimi_articoli,
-               "random_articoli": random_articoli, 
-               "archivio_2009": archivio_2009, 
-               "archivio_2010": archivio_2010, 
-               "archivio_2011": archivio_2011, 
-               "archivio_2012": archivio_2012, 
-               "archivio_2013": archivio_2013, 
-               "archivio_2014": archivio_2014,
+    context = {
+        "lista_articoli": lista_articoli, 
+        "sezioni": sezioni, 
+        "ultimi_articoli": ultimi_articoli,
+        "random_articoli": random_articoli, 
+        "archivio_2009": archivio_2009, 
+        "archivio_2010": archivio_2010, 
+        "archivio_2011": archivio_2011, 
+        "archivio_2012": archivio_2012, 
+        "archivio_2013": archivio_2013, 
+        "archivio_2014": archivio_2014,
     }
     return render(request, "core/homepage.html", context)
 

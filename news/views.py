@@ -41,7 +41,15 @@ def visualizza_articolo(request, slug):
     commenti = paginator.get_page(page)
     
     form_risposta = CommentoModelForm()
-    context = {"articolo": articolo, "articolo_è_piaciuto": like_articolo, "numero_di_like_articolo": numero_di_like_articolo, "commenti": commenti, "commenti_articolo": commenti_articolo, "form_risposta": form_risposta}
+    context = {
+        "articolo": articolo, 
+        "articolo_è_piaciuto": like_articolo, 
+        "numero_di_like_articolo": numero_di_like_articolo, 
+        "commenti": commenti, 
+        "commenti_articolo": commenti_articolo, 
+        "form_risposta": form_risposta,
+        #"meta": articolo.as_meta(),
+    }
     return render(request, "news/singolo_articolo.html", context)
 
     

@@ -2,6 +2,15 @@
 
 {% block head_title %}{{ block.super }} - {{ sezione.nome_sezione }}{% endblock head_title %}
 
+{% block meta %}
+	<meta name="description" content="{{ sezione.descrizione }}">
+    <meta name="keywords" content="Blog, Prima che sia tardi, Contattaci, Manifesto, Sezione,  Massoneria, Massone, Economia, Potere, Politica, Pensieri, Euro, Linux, Costituzione, Stati, Governo, Gioele Magaldi, Renzi, Letta, Berlusconi">
+	<meta name="author" content="Prima che sia tardi">
+	<meta property="og:title" content="Contattaci">
+	<meta property="og:description" content="{{ sezione.descrizione  }}">
+	<meta property="og:type" content="categorie">
+	<meta property="og:url" content="http://127.0.0.1:8000{{ sezione.get_absolute_url }}">
+{% endblock %}
 {% block content %}
 
 	<div class="container">

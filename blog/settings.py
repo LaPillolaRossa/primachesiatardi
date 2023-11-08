@@ -26,7 +26,7 @@ SECRET_KEY = 'rimossa-dalla-storia'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver', '127.0.0.1']
 
 # Application definition
 
@@ -50,7 +50,13 @@ INSTALLED_APPS = [
     'core',
     'news',
     
-    'hitcount'
+    'django_check_seo',
+    'cms',
+    'menus',
+    'treebeard',
+    
+    
+    'hitcount',
     
     
 ]

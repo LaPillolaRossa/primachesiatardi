@@ -1,12 +1,13 @@
-from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.utils.text import slugify
+from ckeditor_uploader.fields import RichTextUploadingField
 import math
 
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
-from django.utils.text import slugify
+
 # Create your models here.
 
 class Sezione(models.Model):

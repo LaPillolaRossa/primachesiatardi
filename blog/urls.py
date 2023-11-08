@@ -31,6 +31,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('calendario/', include('calendario.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path("django-check-seo/", include("django_check_seo.urls")),
     path('news/', include('news.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap",)
 ]
