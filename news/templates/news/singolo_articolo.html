@@ -11,9 +11,9 @@
 	<meta property="og:title" content="{{ articolo.titolo }}">
 	<meta property="og:description" content="{{ articolo.contenuto|truncatewords_html:'120' }}">
 	<meta property="og:type" content="articolo">
-	<meta property="og:url" content="http://127.0.0.1:8000{{ articolo.get_absolute_url }}">
+	<meta property="og:url" content="http://primachesiatardi.com{{ articolo.get_absolute_url }}">
 	{% if articolo.immagine %}
-	<meta property="og:image" content="http://127.0.0.1:8000{{ articolo.immagine.url }}">
+	<meta property="og:image" content="http://primachesiatardi.com{{ articolo.immagine.url }}">
 	{% endif %}
 {% endblock %}
 {% block content %}

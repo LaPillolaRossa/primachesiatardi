@@ -1,12 +1,11 @@
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from ckeditor_uploader.fields import RichTextUploadingField
+from hitcount.models import HitCount
 import math
-
-from hitcount.models import HitCountMixin, HitCount
-from django.contrib.contenttypes.fields import GenericRelation
 
 # Create your models here.
 
@@ -37,7 +36,7 @@ class Sezione(models.Model):
         verbose_name_plural = "Sezioni"
         
         
-class Articolo(models.Model, HitCountMixin):
+class Articolo(models.Model):
     titolo = models.CharField(max_length=255)
     contenuto = RichTextUploadingField(blank=True, null=True)
     immagine = models.ImageField(blank=True, null=True)

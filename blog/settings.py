@@ -26,7 +26,7 @@ SECRET_KEY = 'rimossa-dalla-storia'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['testserver', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -183,7 +183,7 @@ USE_TZ = True
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.libero.it'
+EMAIL_HOST = 'smtps.aruba.it'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'rimosso-dalla-storia'
 EMAIL_HOST_PASSWORD = 'rimossa-dalla-storia'

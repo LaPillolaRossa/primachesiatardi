@@ -4,14 +4,14 @@ from django.core.paginator import Paginator
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
-
 from .forms import ArticoloModelForm, CommentoModelForm
+from hitcount.utils import get_hitcount_model
+from hitcount.views import HitCountMixin
 from .mixins import StaffMixing
 from .models import Articolo, Commento, Sezione
 
-
 # Create your views here.
-
+    
     
 def visualizza_sezione(request, pk):
     sezione = get_object_or_404(Sezione, pk=pk)
@@ -48,8 +48,18 @@ def visualizza_articolo(request, slug):
         "commenti": commenti, 
         "commenti_articolo": commenti_articolo, 
         "form_risposta": form_risposta,
-        #"meta": articolo.as_meta(),
     }
+    
+    hit_count = get_hitcount_model().objects.get_for_object(articolo)
+    hits = hit_count.hits
+    hitcontext = context['hitcount'] = {'pk': hit_count.pk}
+    hit_count_response = HitCountMixin.hit_count(request, hit_count)
+    if hit_count_response.hit_counted:
+        hits = hits + 1
+        hitcontext['hit_counted'] = hit_count_response.hit_counted
+        hitcontext['hit_message'] = hit_count_response.hit_message
+        hitcontext['total_hits'] = hits
+    
     return render(request, "news/singolo_articolo.html", context)
 
     
@@ -143,12 +153,12 @@ def aggiungi_like_articolo(request, slug):
 #    model = Articolo
 #    fields = "__all__"
 #    template_name = "news/singolo_articolo.html"
-#    paginate_by = 5
+#    paginate_by = 10
         
 
 #    def get_context_data(self, **kwargs):
 #        context = super(VisualizzaArticolo, self).get_context_data(**kwargs)
-        
+#        
 #        articolo = get_object_or_404(Articolo, pk=self.kwargs['pk'])        
 #        commenti_articolo = Commento.objects.filter(articolo=articolo)
 #        form_risposta = CommentoModelForm()
@@ -166,9 +176,9 @@ def aggiungi_like_articolo(request, slug):
 #        return context
     
 #    def get_pagination(self):
-#        articolo = get_object_or_404(Articolo, pk=self.kwargs['pk'])
+#        articolo = get_object_or_404(Articolo, slug=self.kwargs['slug'])
 #        queryset = Commento.objects.filter(articolo=articolo) 
-#        paginator = Paginator(queryset, 5) #paginate_by
+#        paginator = Paginator(queryset, 10) #paginate_by
 #        page = self.request.GET.get('pagina')
 #        commenti_articolo = paginator.get_page(page)
 #        return commenti_articolo

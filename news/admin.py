@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Articolo, Commento, Sezione
 
-
 # Register your models here.
 
 class ArticoloModelAdmin(admin.ModelAdmin):
@@ -26,4 +25,3 @@ class SezioneModelAdmin(admin.ModelAdmin):
 admin.site.register(Articolo, ArticoloModelAdmin)
 admin.site.register(Commento, CommentoModelAdmin)
 admin.site.register(Sezione, SezioneModelAdmin)
-

@@ -24,7 +24,7 @@ def contatti(request):
                 email = EmailMessage(
                     "Richiesta di collaborazione",
                     """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
-                    "destinatario@example.com",
+                    "comunicazioni@primachesiatardi.com",
                     [destinatario],
 
                     headers={"Message-ID": "foo"},
@@ -45,7 +45,7 @@ def contatti(request):
                 email = EmailMessage(
                     "Richiesta di collaborazione",
                     """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
-                    "destinatario@example.com",
+                    "comunicazioni@primachesiatardi.com",
                     [destinatario],
                     headers={"Message-ID": "foo"},
                 )
