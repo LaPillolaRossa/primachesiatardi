@@ -5,15 +5,15 @@
 {% block head_title %}{{ block.super }} - {{ articolo.titolo }}{% endblock head_title %}
 
 {% block meta %}
-	<meta name="description" content="{{ articolo.contenuto|truncatewords_html:'120' }}">
+	<meta name="description" content="{{ articolo.contenuto|safe|truncatewords_html:'120' }}">
     <meta name="keywords" content="Blog, Prima che sia tardi, Contattaci, Manifesto, Sezione,  Massoneria, Massone, Economia, Potere, Politica, Pensieri, Euro, Linux, Costituzione, Stati, Governo, Gioele Magaldi, Renzi, Letta, Berlusconi">
 	<meta name="author" content="Prima che sia tardi">
 	<meta property="og:title" content="{{ articolo.titolo }}">
-	<meta property="og:description" content="{{ articolo.contenuto|truncatewords_html:'120' }}">
+	<meta property="og:description" content="{{ articolo.contenuto|safe|truncatewords_html:'120' }}">
 	<meta property="og:type" content="articolo">
-	<meta property="og:url" content="http://primachesiatardi.com{{ articolo.get_absolute_url }}">
+	<meta property="og:url" content="https://primachesiatardi.com{{ articolo.get_absolute_url }}">
 	{% if articolo.immagine %}
-	<meta property="og:image" content="http://primachesiatardi.com{{ articolo.immagine.url }}">
+	<meta property="og:image" content="https://primachesiatardi.com{{ articolo.immagine.url }}">
 	{% endif %}
 {% endblock %}
 {% block content %}

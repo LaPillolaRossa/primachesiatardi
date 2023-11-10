@@ -26,7 +26,11 @@ SECRET_KEY = 'rimossa-dalla-storia'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'testserver']
+
+#ALLOWED_HOSTS = ['primachesiatardi.com', '164.92.210.159']
+
+#CSRF_TRUSTED_ORIGINS = ['https://primachesiatardi.com']
 
 # Application definition
 
@@ -121,22 +125,7 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql",
-#        "OPTIONS": {
-#            "service": "my_service",
-#            "passfile": ".my_pgpass",
-#        },
-#    }
-#}
+# Configurazione Database Sviluppo
 
 DATABASES = {
     'default': {
@@ -148,6 +137,19 @@ DATABASES = {
        'PORT': '',
    },
 }
+
+# Configurazione Database Produzione
+
+#DATABASES = {
+#    'default': {
+#       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#       'USER': 'rimosso-dalla-storia',
+#       'NAME': 'primachesiatardi_5844702410',
+#       'HOST': 'rimosso-dalla-storia',
+#       'PASSWORD': 'rimossa-dalla-storia',
+#       'PORT': '',
+#   },
+#}
 
 
 # Password validation
@@ -180,7 +182,21 @@ USE_I18N = True
 
 USE_TZ = True
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Configurazione Invio Mail Sviluppo
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+#EMAIL_USE_SSL = True
+#EMAIL_HOST = 'smtp.libero.it'
+#EMAIL_PORT = 465
+#EMAIL_HOST_USER = 'rimosso-dalla-storia'
+#EMAIL_HOST_PASSWORD = 'rimossa-dalla-storia'
+
+# Configurazione Invio Mail Produzione
+
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtps.aruba.it'
@@ -188,7 +204,6 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'rimosso-dalla-storia'
 EMAIL_HOST_PASSWORD = 'rimossa-dalla-storia'
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -200,6 +215,8 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_URL = 'static/'
+
+#STATIC_ROOT = '/home/primachesiatardi/static-serve/'
 
 MEDIA_ROOT = BASE_DIR / 'media-serve/'
 
