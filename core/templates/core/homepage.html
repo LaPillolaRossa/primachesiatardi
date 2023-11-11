@@ -2,12 +2,15 @@
 {% block head_title %}{{ block.super }} - HomePage{% endblock head_title %}
 {% block meta %}
 	<meta name="description" content="Questo blog lascia un segno indelebile. Alla memoria dei posteri. Prima che sia tardi">
-    <meta name="keywords" content="Blog, Prima che sia tardi, Contattaci, Manifesto, Sezione,  Massoneria, Massone, Economia, Potere, Politica, Pensieri, Euro, Linux, Costituzione, Stati, Governo, Gioele Magaldi, Renzi, Letta, Berlusconi">
+    <meta name="keywords" content="Adriano, Agenzia, Alessandro, Alimentarius, Alluminio, Ambrosoli, Ansia, Argomento, Assemblea, Banca, Bancaria, Banche, Benessere, Bilderberg, Blog, Bob, Bot, Burattino, Caimano, Cancro, Cloridrato, Contattaci, Debito, Eserciti, Fiducia, Formigoni, Fusione, Manifesto, Massone, Massoneria, Economia, Potere, Consenso, Crisi, Pensieri, Euro, Moneta, Schiavitù, Linux, Blackwater, Cesare, Codex, Contractors, Costituzione, Diavolo, Diffusori, Distruzione, Dittatura, Documento, Dollari, Economica, Economico, Elezioni, Europea, Europee, Faccia, Farmaco, Farrage, Fascismo, Fili, Finanziaria, Forza, Futile, Futuro, Futura, Generale, Governo, G8, Genova, Giacomo, Gioele, Giorgio, Globalizzazione, Golpe, Google, Grecia, Guerra, Haarp, Illuminati, Inganno, Influenza, Internet, Interrogazione, Israele, Istituzioni, Italia, Kennedy, Lega, Leggenda, Lemmi, Libertà, Loggia, Lombardia, Magaldi, Matteotti, Media, Memoria, Messina, Mezzanotte, Militare, Miliardi, Monetaria, Nasa, Nazioni, Nemico, Nigel, Notizie, Nucleare, Obama, Ordine, Renzi, Letta, Berlusconi, Draghi, P2, Padoan, Parlamentare, Persi, Piano, Piduista, Plastica, Politica, Prima che sia tardi, Profumo, Pubblica, Puttane, Radioattive, Regione, Religione, Responsabili, Riflessioni, Ritalin, Sabaudia, Saggio, Segreti, Segreto, Servizi, 11 Settembre, Sezione, Scuola, Silenzio, Silvio, Sistema, Spaventoso, Sporco, Stati, Stato, Statunitensi, Statuto, Stranamore, Superenalotto, Tondo, Toscana, Trash, Universale, Unite, Uomo, Vietnam, Vortex, Voto, Zarathustra">
 	<meta name="author" content="Prima che sia tardi">
 	<meta property="og:title" content="Homepage">
 	<meta property="og:description" content="Questo blog lascia un segno indelebile. Alla memoria dei posteri. Prima che sia tardi">
 	<meta property="og:type" content="blog">
 	<meta property="og:url" content="https://primachesiatardi.com">
+	{% if articolo.immagine %}
+	<meta property="og:image" content="{% static 'logo.png'%}">
+	{% endif %}
 {% endblock %}
 
 {% block content %}

@@ -38,6 +38,7 @@ class Sezione(models.Model):
         
 class Articolo(models.Model):
     titolo = models.CharField(max_length=255)
+    descrizione = models.TextField(blank=True, null=True)
     contenuto = RichTextUploadingField(blank=True, null=True)
     immagine = models.ImageField(blank=True, null=True)
     data_creazione = models.DateTimeField(auto_now_add=True)

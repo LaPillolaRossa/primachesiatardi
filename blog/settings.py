@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'testserver']
 
-#ALLOWED_HOSTS = ['primachesiatardi.com', '164.92.210.159']
+#ALLOWED_HOSTS = ['primachesiatardi.com', 'www.primachesiatardi.com']
 
 #CSRF_TRUSTED_ORIGINS = ['https://primachesiatardi.com']
 

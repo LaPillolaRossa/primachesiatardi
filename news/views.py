@@ -88,7 +88,7 @@ def crea_articolo(request, pk):
 class AggiornaArticolo(StaffMixing, UpdateView):
     model = Articolo
     template_name = "news/aggiorna_articolo.html"
-    fields = ['titolo', 'contenuto', 'immagine', "autore_articolo", "sezione_appartenenza", "slug"]
+    fields = ['titolo', "descrizione", "contenuto", "immagine", "autore_articolo", "sezione_appartenenza", "slug"]
     
     def get_success_url(self):
         articolo = self.object
