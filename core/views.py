@@ -25,7 +25,7 @@ def record_view(request, pk):
     
 def homepageview(request):
     articoli = list(Articolo.objects.all())
-    random_articoli = random.sample(articoli, 2)
+    random_articoli = random.sample(articoli, 20)
     sezioni = Sezione.objects.all()
     lista_articoli = Articolo.objects.all()
     ultimi_articoli = Articolo.objects.filter().order_by("-pk")

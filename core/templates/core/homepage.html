@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load hitcount_tags %}
 {% block head_title %}{{ block.super }} - HomePage{% endblock head_title %}
 {% block meta %}
 	<meta name="description" content="Questo blog lascia un segno indelebile. Alla memoria dei posteri. Prima che sia tardi">
@@ -9,7 +10,7 @@
 	<meta property="og:type" content="blog">
 	<meta property="og:url" content="https://primachesiatardi.com">
 	{% if articolo.immagine %}
-	<meta property="og:image" content="{% static 'logo.png'%}">
+	<meta property="og:image" content="/static-storage/logo.png">
 	{% endif %}
 {% endblock %}
 
@@ -28,55 +29,69 @@
 		<p></p>
 	{% endif %}
 	
-  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-    <div class="col-md-12 px-0">
-		
-		{% for articolo in ultimi_articoli %}
-			{% if forloop.first %}
-			
-      <h1 class="display-4 fst-italic text-secondary">{{ articolo.titolo }}</h1> 
-      <p class="lead my-3">{{ articolo.contenuto|safe|truncatewords:"40"}}</p>
-      <p class="lead mb-0"><a href="{{ articolo.get_absolute_url }}" class="text-white fw-bold">Continua la lettura...</a></p>
-      
-      		{% endif %}
-    </div>
-    	{% endfor %}
-  </div>
 
+	  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+	    <div class="col-md-12 px-0">
+			
+			{% for articolo in ultimi_articoli %}
+				{% if forloop.first %}
+				
+	      <h1 class="display-4 fst-italic text-secondary">{{ articolo.titolo }}</h1> 
+	      <p class="lead my-3">{{ articolo.contenuto|safe|truncatewords:"40"}}</p>
+	      <p class="lead mb-0"><a href="{{ articolo.get_absolute_url }}" class="text-white fw-bold">Continua la lettura...</a></p>
+	      
+	      		{% endif %}
+	    </div>
+	    	{% endfor %}
+	  </div>
+	
 	{% for articolo in random_articoli %}
 		{% if forloop.counter <= 2 %}
 			{% if forloop.first %}<div class="row mb-2">{% endif %}
   
-    <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-
-          <strong class="d-inline-block mb-2 text-primary">{{ articolo.sezione_appartenenza }}</strong>
-          <h3 class="mb-1 text-secondary">{{ articolo.titolo|truncatewords:"5"}}</h3>
-          <div class="mb-1 text-muted">{{ articolo.data_creazione|date:"d M Y" }}</div>
-          <p class="card-text mb-auto">Mi Piace: {{ articolo.get_total_like_articolo}}</p>
-          <a href="{{ articolo.get_absolute_url }}" class="stretched-link">Continua la lettura...</a>
-  
-        </div>
-        <div class="col-auto d-none d-lg-block">	
-		  {% if articolo.immagine %}
-		  	<img src="{{ articolo.immagine.url }}" alt="{{ articolo.titolo }}" width="200" height="250">  
-		  {% else %}
-		  	<p></p>
-		  {% endif %}
-        </div>
-      </div>
-    </div>
+	    <div class="col-md-6">
+	      <div class="row g-0 border rounded overflow-hidden mb-4 shadow">
+	        <div class="col p-4 flex-column position-sticky">
+	
+	          <strong class="d-inline-block mb-2 text-primary">{{ articolo.sezione_appartenenza }}</strong>
+	          <h3 class="mb-1 text-secondary">{{ articolo.titolo|truncatewords:"4" }}</h3>
+	          <div class="mb-1 text-muted">{{ articolo.data_creazione|date:"d M Y" }}</div>
+	          <p class="card-text mb-auto">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 18 20">
+				  <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+				</svg> {{ articolo.get_total_like_articolo }} 
+			  </p>
+	          <p class="card-text mb-auto">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 18 20">
+				  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+				  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+				</svg> {% get_hit_count for articolo %} 
+			  </p> 
+	          
+	          <a href="{{ articolo.get_absolute_url }}" class="stretched-link">Continua la lettura...</a>
+	  
+	        </div>
+	        <div class="col-auto d-none d-lg-block">	
+			  {% if articolo.immagine %}
+			  	<img src="{{ articolo.immagine.url }}" alt="{{ articolo.titolo }}" width="auto" height="450">  
+			  {% else %}
+			  	<img src="/media/cartina-geografica-612x612.jpg" alt="{{ articolo.titolo }}" width="auto" height="450"> 
+			  {% endif %}
+	        </div>
+	      </div>
+	    </div>
             	{% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
     	{% endif %}  
 	{% endfor %}
+		
+
     
   <div class="row g-5">
     <div class="col-md-8">
       <h3 class="pb-4 mb-4 fst-italic border-bottom">Lista Articoli</h3>
       
 	{% for articolo in ultimi_articoli %}
-      	{% if forloop.counter <= 50 %}
+      	{% if forloop.counter <= 5 %}
       	<div class="mt-2 text-end">
 		{% if request.user.is_staff %}
 			<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' slug=articolo.slug %}">Aggiorna</a>

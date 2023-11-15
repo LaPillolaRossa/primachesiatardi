@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from accounts.forms import FormRegistrazione
+
 # Create your views here.
 
 def registrazione_view(request):
@@ -24,3 +25,5 @@ def registrazione_view(request):
     context = {"form": form}
     return render(request, "accounts/registrazione.html", context)
 
+
+    

@@ -14,20 +14,24 @@
 {% endblock %}
 
 {% block content %}
+	
+        <div class="container">
+                <h1 class="text-secondary text-center">Spazio dedicato ai lettori di questo blog!</h1>
+                <h5 class="text-center">Se pensi di avere del materiale interessante da pubblicare e vuoi che venga condiviso sul blog compila il form!</h5>
+                <br><hr><br>
+                <div class="row mt-2 justify-content-center">
+                        <div class="col-lg-5 col-sm-auto d-flex justify-content-center">
+                                <form class="" method="POST" enctype="multipart/form-data" novalidate>
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                <div class="container text-center">
+                                        <input type="submit" class="btn btn-secondary my-2" value="INVIA!">
+                                        <input type="hidden" name="next" value="{{ next }}">
+                                </div>
+                                </form>
+                        </div>
+                </div>
+        </div>
 
-	<div class="container">
-		<div class="row justify-content-center mt-2">
-			<div class="col-12 text-center">
-				<h1 class="text-secondary">Spazio dedicato ai lettori di questo blog!</h1>
-				<h5>Se pensi di avere del materiale interessante da pubblicare e vuoi che venga condiviso sul blog compila il form!</h5>
-				<form class="" method="POST" enctype="multipart/form-data" novalidate>
-					{% csrf_token %}
-					{{ form|crispy }}
-					<input type="submit" class="btn btn-info my-2" value="INVIA!">
-					<input type="hidden" name="next" value="{{ next }}">
-				</form>
-			</div>
-		</div>
-	</div>
 		
 {% endblock content %}

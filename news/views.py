@@ -30,6 +30,14 @@ class CreaSezione(StaffMixing, CreateView):
 def visualizza_articolo(request, slug):
     articolo = get_object_or_404(Articolo, slug=slug)
     commenti_articolo = Commento.objects.filter(articolo=articolo)
+    
+    archivio_2009 = Articolo.objects.filter(data_creazione__year = 2009)
+    archivio_2010 = Articolo.objects.filter(data_creazione__year = 2010)
+    archivio_2011 = Articolo.objects.filter(data_creazione__year = 2011)
+    archivio_2012 = Articolo.objects.filter(data_creazione__year = 2012)
+    archivio_2013 = Articolo.objects.filter(data_creazione__year = 2013)
+    archivio_2014 = Articolo.objects.filter(data_creazione__year = 2014)
+    
     likes_connected = get_object_or_404(Articolo, slug=slug)
     numero_di_like_articolo = likes_connected.get_total_like_articolo()
     like_articolo = False
@@ -48,6 +56,12 @@ def visualizza_articolo(request, slug):
         "commenti": commenti, 
         "commenti_articolo": commenti_articolo, 
         "form_risposta": form_risposta,
+        "archivio_2009": archivio_2009, 
+        "archivio_2010": archivio_2010, 
+        "archivio_2011": archivio_2011, 
+        "archivio_2012": archivio_2012, 
+        "archivio_2013": archivio_2013, 
+        "archivio_2014": archivio_2014,
     }
     
     hit_count = get_hitcount_model().objects.get_for_object(articolo)

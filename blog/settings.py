@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*', 'testserver']
 
 #ALLOWED_HOSTS = ['primachesiatardi.com', 'www.primachesiatardi.com']
 
-#CSRF_TRUSTED_ORIGINS = ['https://primachesiatardi.com']
+#CSRF_TRUSTED_ORIGINS = ['https://primachesiatardi.com', 'https://www.primachesiatardi.com']
 
 # Application definition
 
@@ -52,18 +52,19 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'core',
+    'captcha',
+    'hitcount',
     'news',
     
     'django_check_seo',
     'cms',
     'menus',
     'treebeard',
-    
-    
-    'hitcount',
-    
-    
+
 ]
+
+RECAPTCHA_PUBLIC_KEY = 'rimossa-dalla-storia'
+RECAPTCHA_PRIVATE_KEY = 'rimossa-dalla-storia'
 
 SITE_ID = 1
 
@@ -184,7 +185,7 @@ USE_TZ = True
 
 # Configurazione Invio Mail Sviluppo
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -196,7 +197,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Configurazione Invio Mail Produzione
 
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+SERVER_EMAIL = 'destinatario@example.com'
+
+DEFAULT_FROM_EMAIL = 'comunicazioni@primachesiatardi.com'
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtps.aruba.it'

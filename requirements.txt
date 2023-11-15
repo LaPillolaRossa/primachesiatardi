@@ -18,6 +18,7 @@ django-hitcount==1.3.5
 django-js-asset==2.1.0
 django-meta==2.4.0
 django-polymorphic==3.1.0
+django-recaptcha==3.0.0
 django-sekizai==4.1.0
 django-treebeard==4.7
 djangocms-admin-style==3.2.6

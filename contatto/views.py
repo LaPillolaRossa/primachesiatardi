@@ -1,7 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .forms import FormModelloContatto
-from .models import ModelloContatto
+from .models import BlacklistIP, ModelloContatto
 from django.core.mail import EmailMessage
+
 
 
 # Create your views here.
@@ -9,48 +11,38 @@ from django.core.mail import EmailMessage
 def contatti(request):
     
     if request.method == "POST":
-        form = FormModelloContatto(request.POST, request.FILES)
-        file = request.POST.get('file', True)
-        if file:
-            if form.is_valid():
-                form.cleaned_data["nome"]
-                form.cleaned_data["cognome"]
-                form.cleaned_data["email"]
-                form.cleaned_data["oggetto"]
-                form.cleaned_data["contenuto"]
-                file = ModelloContatto(file=request.FILES["file"])
-                form.save()    
-                destinatario = form.cleaned_data["email"]            
-                email = EmailMessage(
-                    "Richiesta di collaborazione",
-                    """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
-                    "comunicazioni@primachesiatardi.com",
-                    [destinatario],
-
-                    headers={"Message-ID": "foo"},
-                )
-                email.send()              
-                return redirect("/contattaci-successo")
-                 
+        
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        user_agent = request.headers.get('User-Agent', '')[:255]
+        host_name = request.META.get('REMOTE_HOST')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[-1].strip()
         else:
-            form = FormModelloContatto(request.POST)
-            if form.is_valid():
-                form.cleaned_data["nome"]
-                form.cleaned_data["cognome"]
-                form.cleaned_data["email"]
-                form.cleaned_data["oggetto"]
-                form.cleaned_data["contenuto"]
-                form.save()
-                destinatario = form.cleaned_data["email"]
-                email = EmailMessage(
-                    "Richiesta di collaborazione",
-                    """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
-                    "comunicazioni@primachesiatardi.com",
-                    [destinatario],
-                    headers={"Message-ID": "foo"},
-                )
-                email.send()
-                return redirect("/contattaci-successo")
+            ip = request.META.get('REMOTE_ADDR')
+        if BlacklistIP.objects.filter(ip__exact=ip):
+            return HttpResponse("<h1>Internal server error (500)<h1>")
+        form = FormModelloContatto(request.POST, request.FILES)
+        if request.POST.get('file', True):
+            ModelloContatto(file=request.FILES["file"])
+        if form.is_valid():
+                        
+            instance = form.save(commit=False)
+            instance.ip = ip
+            instance.user_agent = user_agent
+            instance.host_name = host_name   
+            instance.save()
+                        
+            destinatario = form.cleaned_data["email"]            
+            email = EmailMessage(
+                "Richiesta di collaborazione",
+                """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
+                "comunicazioni@primachesiatardi.com",
+                [destinatario],
+        
+                headers={"Message-ID": "foo"},
+            )
+            email.send()              
+            return redirect("/contattaci-successo")
     else:
         form = FormModelloContatto()
 
