@@ -13,8 +13,8 @@ from .models import Articolo, Commento, Sezione
 # Create your views here.
     
     
-def visualizza_sezione(request, pk):
-    sezione = get_object_or_404(Sezione, pk=pk)
+def visualizza_sezione(request, slug):
+    sezione = get_object_or_404(Sezione, slug=slug)
     articoli_sezione = Articolo.objects.filter(sezione_appartenenza=sezione).order_by("-data_creazione")
     context = {"sezione": sezione, "articoli": articoli_sezione}
     return render(request, "news/singola_sezione.html", context)
@@ -30,14 +30,8 @@ class CreaSezione(StaffMixing, CreateView):
 def visualizza_articolo(request, slug):
     articolo = get_object_or_404(Articolo, slug=slug)
     commenti_articolo = Commento.objects.filter(articolo=articolo)
-    
-    archivio_2009 = Articolo.objects.filter(data_creazione__year = 2009)
-    archivio_2010 = Articolo.objects.filter(data_creazione__year = 2010)
-    archivio_2011 = Articolo.objects.filter(data_creazione__year = 2011)
-    archivio_2012 = Articolo.objects.filter(data_creazione__year = 2012)
-    archivio_2013 = Articolo.objects.filter(data_creazione__year = 2013)
-    archivio_2014 = Articolo.objects.filter(data_creazione__year = 2014)
-    
+    articoli = Articolo.objects.all()
+
     likes_connected = get_object_or_404(Articolo, slug=slug)
     numero_di_like_articolo = likes_connected.get_total_like_articolo()
     like_articolo = False
@@ -56,12 +50,7 @@ def visualizza_articolo(request, slug):
         "commenti": commenti, 
         "commenti_articolo": commenti_articolo, 
         "form_risposta": form_risposta,
-        "archivio_2009": archivio_2009, 
-        "archivio_2010": archivio_2010, 
-        "archivio_2011": archivio_2011, 
-        "archivio_2012": archivio_2012, 
-        "archivio_2013": archivio_2013, 
-        "archivio_2014": archivio_2014,
+        "articoli": articoli, 
     }
     
     hit_count = get_hitcount_model().objects.get_for_object(articolo)
@@ -83,19 +72,17 @@ def staff_required(login_url=None):
 
     
 @staff_required(login_url="/accounts/login")
-def crea_articolo(request, pk):
-    sezione = get_object_or_404(Sezione, pk=pk)
+def crea_articolo(request):
     if request.method == "POST":
         form = ArticoloModelForm(request.POST)
         if form.is_valid():
             articolo = form.save(commit=False) # Si sospende temporaneamente la creazione dell'oggetto per aggiungere attributi aggiuntivi
-            articolo.sezione_appartenenza = sezione
             articolo.autore_articolo = request.user
             articolo.save()
             return HttpResponseRedirect(articolo.get_absolute_url()) 
     else:
         form = ArticoloModelForm()
-    context = {"form": form, "sezione": sezione}
+    context = {"form": form}
     return render(request, "news/crea_articolo.html", context)
 
 
@@ -160,6 +147,7 @@ def aggiungi_like_articolo(request, slug):
         articolo.like_articolo.add(request.user)
 
     return HttpResponseRedirect(url_articolo)
+
 
 
 

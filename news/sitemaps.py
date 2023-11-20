@@ -3,8 +3,9 @@ from news.models import Articolo
 
 
 class NewsSitemap(Sitemap):
-    changefreq = "monthly"
+    changefreq = "daily"
     priority = 0.5
+    protocol = 'https'
 
     def items(self):
         return Articolo.objects.all()

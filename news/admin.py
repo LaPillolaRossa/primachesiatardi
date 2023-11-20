@@ -19,7 +19,7 @@ class CommentoModelAdmin(admin.ModelAdmin):
 class SezioneModelAdmin(admin.ModelAdmin):
     model = Sezione
     list_display = ["nome_sezione", "descrizione"]
-    
+
 
 
 admin.site.register(Articolo, ArticoloModelAdmin)

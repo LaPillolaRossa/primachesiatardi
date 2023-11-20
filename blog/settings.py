@@ -24,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'rimossa-dalla-storia'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'testserver']
+#ALLOWED_HOSTS = ['*', 'testserver']
 
-#ALLOWED_HOSTS = ['primachesiatardi.com', 'www.primachesiatardi.com']
+ALLOWED_HOSTS = ['www.primachesiatardi.com']
 
-#CSRF_TRUSTED_ORIGINS = ['https://primachesiatardi.com', 'https://www.primachesiatardi.com']
+CSRF_TRUSTED_ORIGINS = ['https://www.primachesiatardi.com']
 
 # Application definition
 
@@ -86,7 +86,6 @@ CKEDITOR_CONFIGS = {
             ]
         ),
         "extraAllowedContent": 'iframe[*]',
-        
 
     },
 }
@@ -128,29 +127,29 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 
 # Configurazione Database Sviluppo
 
-DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'USER': 'rimosso-dalla-storia',
-       'NAME': 'marco',
-       'HOST': 'rimosso-dalla-storia',
-       'PASSWORD': 'rimossa-dalla-storia',
-       'PORT': '',
-   },
-}
-
-# Configurazione Database Produzione
-
 #DATABASES = {
 #    'default': {
 #       'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #       'USER': 'rimosso-dalla-storia',
-#       'NAME': 'primachesiatardi_5844702410',
+#       'NAME': 'marco',
 #       'HOST': 'rimosso-dalla-storia',
 #       'PASSWORD': 'rimossa-dalla-storia',
 #       'PORT': '',
 #   },
 #}
+
+# Configurazione Database Produzione
+
+DATABASES = {
+    'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'USER': 'rimosso-dalla-storia',
+       'NAME': 'primachesiatardi_5844702411',
+       'HOST': 'rimosso-dalla-storia',
+       'PASSWORD': 'rimossa-dalla-storia',
+       'PORT': '',
+   },
+}
 
 
 # Password validation
@@ -221,7 +220,7 @@ STATICFILES_DIRS = [
 
 STATIC_URL = 'static/'
 
-#STATIC_ROOT = '/home/primachesiatardi/static-serve/'
+STATIC_ROOT = '/home/primachesiatardi/static-serve/'
 
 MEDIA_ROOT = BASE_DIR / 'media-serve/'
 

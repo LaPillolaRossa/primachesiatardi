@@ -1,3 +1,4 @@
+#from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
@@ -13,7 +14,8 @@ class ModelloContatto(models.Model):
     ip = models.CharField(max_length=40, editable=False, null=True)
     user_agent = models.CharField(max_length=255, editable=False, null=True)
     data_creazione = models.DateTimeField(editable=False, auto_now_add=True, null=True)
-    host_name = models.CharField(editable=False, null=True)
+    #session = models.CharField(max_length=40, editable=False, null=True)
+    #user = models.ForeignKey(User, null=True, editable=False, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.oggetto

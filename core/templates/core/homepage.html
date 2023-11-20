@@ -8,7 +8,7 @@
 	<meta property="og:title" content="Homepage">
 	<meta property="og:description" content="Questo blog lascia un segno indelebile. Alla memoria dei posteri. Prima che sia tardi">
 	<meta property="og:type" content="blog">
-	<meta property="og:url" content="https://primachesiatardi.com">
+	<meta property="og:url" content="https://www.primachesiatardi.com">
 	{% if articolo.immagine %}
 	<meta property="og:image" content="/static-storage/logo.png">
 	{% endif %}
@@ -21,15 +21,15 @@
 	
 	{% if request.user.is_staff %}
 	<div class="row">
-		<div class="col-md-12 my-2">
-			<p class="text-end"><a class="btn btn-sm btn-danger" href="{% url 'crea_sezione' %}">Crea Sezione</a></p>
+		<div class="col-md-12 my-2 text-end">
+			<a class="btn btn-sm btn-danger mt-2" href="{% url 'crea_sezione' %}">Crea Sezione</a>
+			<a class="btn btn-sm btn-danger mt-2" href="{% url 'crea_articolo' %}">Crea Articolo</a>
 		</div>
 	</div>
 	{% else %}
 		<p></p>
 	{% endif %}
 	
-
 	  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
 	    <div class="col-md-12 px-0">
 			
@@ -91,15 +91,15 @@
       <h3 class="pb-4 mb-4 fst-italic border-bottom">Lista Articoli</h3>
       
 	{% for articolo in ultimi_articoli %}
-      	{% if forloop.counter <= 5 %}
+      	{% if forloop.counter <= 12 %}
       	<div class="mt-2 text-end">
 		{% if request.user.is_staff %}
 			<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' slug=articolo.slug %}">Aggiorna</a>
 			<a class="btn btn-sm btn-danger mt-2" href="{% url 'cancella_articolo' articolo.slug %}">Elimina</a>
 		{% endif %}
 		</div>
-      	<h2 class="text-danger">{{ articolo.titolo }}</h2>
-      	<p>{{ articolo.autore_articolo }}</p>
+      	<h2 class="text-secondary">{{ articolo.titolo }}</h2>
+      	<p class="text-danger">{{ articolo.autore_articolo }}</p>
 		<p>{{ articolo.data_creazione|date:"d M Y" }}</p>
 		<p>{{ articolo.contenuto|safe|truncatewords_html:30  }}</p>
 		<p class="lead mb-0"><a href="{{ articolo.get_absolute_url }}" class="text-black fw-bold">Continua la lettura...</a></p>
@@ -109,63 +109,16 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" style="background-color: #CC0000; border-radius: 1%;">
       <div class="position-sticky" style="top: 2rem;">
-        <div class="p-4 mb-3 bg-light rounded">
+        <div class="p-4 my-3 bg-light rounded">
           <h4 class="fst-italic">Chi siamo</h4>
           <p class="mb-0">Una libera aggregazione fondata sulla promozione della partecipazione cosciente alla vita collettiva dell'umanità in genere, intesa in termini locali, nazionali, mondiali o planetari.</p>
         </div>
-
-        <div class="p-4">
-          <h4 class="fst-italic">Archivio</h4>
-          <ol class="list-unstyled mb-0">
-
-		  <li>2009
-		{% for articolo in archivio_2009 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-           <li>2010
-		{% for articolo in archivio_2010 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-           <li>2011
-		{% for articolo in archivio_2011 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-           <li>2012
-		{% for articolo in archivio_2012 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-           <li>2013
-		{% for articolo in archivio_2013 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-           <li>2014
-		{% for articolo in archivio_2014 %}
-            <ul>
-				<li><p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p></li>
-			</ul>
-		{% endfor %}   
-           </li>
-          </ol>
-        </div>
-
-        <div class="p-4">
+		<div class="p-4 mb-3 bg-light rounded">
+			{% include 'news/archivio.html' %}
+		</div>
+        <div class="p-4 mb-3 bg-light rounded">
           <h4 class="fst-italic">Contatti</h4>
           <ol class="list-unstyled">
             <li><a href="https://t.me/PrimaCheSiaTardi">Telegram</a></li>
@@ -177,7 +130,7 @@
 
 </main>
 
-<footer class="blog-footer mx-4">
+<footer class="blog-footer mx-4 mt-2">
   <p><a href="/">Back to top</a></p>
 </footer>
 

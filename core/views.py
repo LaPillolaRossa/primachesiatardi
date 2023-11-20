@@ -1,51 +1,23 @@
-import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse
 from news.models import Articolo, Commento, Sezione
 import random
 # Create your views here.
 
-
-def record_view(request, pk):
-
-    articolo = get_object_or_404(Articolo, pk=pk)
-
-    if not Articolo.objects.filter(
-                    articolo=articolo,
-                    session=request.session.session_key):
-        view = Articolo(articolo=articolo,
-                            ip=request.META['REMOTE_ADDR'],
-                            data_creazione=datetime.datetime.now(),
-                            session=request.session.session_key)
-        view.save()
-
-    return HttpResponse(u"%s" % Articolo.objects.filter(articolo=articolo).count())
-
     
 def homepageview(request):
-    articoli = list(Articolo.objects.all())
-    random_articoli = random.sample(articoli, 20)
+    lista_articoli_random = list(Articolo.objects.all())
+    random_articoli = random.sample(lista_articoli_random, 20)
     sezioni = Sezione.objects.all()
     lista_articoli = Articolo.objects.all()
     ultimi_articoli = Articolo.objects.filter().order_by("-pk")
-    archivio_2009 = Articolo.objects.filter(data_creazione__year = 2009)
-    archivio_2010 = Articolo.objects.filter(data_creazione__year = 2010)
-    archivio_2011 = Articolo.objects.filter(data_creazione__year = 2011)
-    archivio_2012 = Articolo.objects.filter(data_creazione__year = 2012)
-    archivio_2013 = Articolo.objects.filter(data_creazione__year = 2013)
-    archivio_2014 = Articolo.objects.filter(data_creazione__year = 2014)
+    articoli = Articolo.objects.all()
     context = {
         "lista_articoli": lista_articoli, 
         "sezioni": sezioni, 
         "ultimi_articoli": ultimi_articoli,
         "random_articoli": random_articoli, 
-        "archivio_2009": archivio_2009, 
-        "archivio_2010": archivio_2010, 
-        "archivio_2011": archivio_2011, 
-        "archivio_2012": archivio_2012, 
-        "archivio_2013": archivio_2013, 
-        "archivio_2014": archivio_2014,
+        "articoli": articoli,
     }
     return render(request, "core/homepage.html", context)
 

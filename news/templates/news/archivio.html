@@ -1,0 +1,24 @@
+			
+
+<h4 class="fst-italic">Archivio</h4>
+	
+{% regroup articoli|dictsortreversed:"data_creazione" by data_creazione|date:"Y" as articoli_per_anno %}				  
+{% for anno in articoli_per_anno %}
+<details>
+   <summary class="lead my-2">{{ anno.grouper }}</summary>
+   {% regroup anno.list|dictsortreversed:"data_creazione" by data_creazione|date:"F" as articoli_per_mese %}	
+   {% for mese in articoli_per_mese %}
+   <ul>
+	   <details>
+		   <summary class="lead">{{ mese.grouper }}</summary>
+		   {% for articolo in mese.list %}
+		   <ul>
+			   <summary class="lead my-2"><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></summary>
+		   </ul>
+		   {% endfor %}
+	   </details>
+   </ul>
+   {% endfor %}
+</details>
+{% endfor %}
+

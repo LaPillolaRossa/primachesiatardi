@@ -18,12 +18,13 @@ class Sezione(models.Model):
     nome_sezione = models.CharField(max_length=80)
     descrizione = models.CharField(max_length=150, blank=True, null=True)
     logo_sezione = models.ImageField(blank=True, null=True)
+    slug = models.SlugField(max_length=255, null=True)
     
     def __str__(self):
         return self.nome_sezione
     
     def get_absolute_url(self):
-        return reverse("sezione_view", kwargs={"pk": self.pk})
+        return reverse("sezione_view", kwargs={"slug": self.slug})
     
     def get_last_articles(self):
         return Articolo.objects.filter(sezione_appartenenza=self).order_by("-data_creazione")[:10]
@@ -43,7 +44,7 @@ class Articolo(models.Model):
     immagine = models.ImageField(blank=True, null=True)
     data_creazione = models.DateTimeField(auto_now_add=True)
     autore_articolo = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articoli")
-    sezione_appartenenza = models.ForeignKey(Sezione, on_delete=models.CASCADE, blank=True, null=True)
+    sezione_appartenenza = models.ForeignKey(Sezione, on_delete=models.CASCADE)
     like_articolo = models.ManyToManyField(User, related_name="likes_articoli")
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
     slug = models.SlugField(max_length=255, null=True)
@@ -85,3 +86,12 @@ class Commento(models.Model):
     class Meta:
         verbose_name = "Commento"
         verbose_name_plural = "Commenti"
+        
+  
+    
+
+
+
+
+
+

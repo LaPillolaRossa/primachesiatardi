@@ -6,7 +6,7 @@ class ArticoloModelForm(forms.ModelForm):
 
     class Meta:
         model = Articolo
-        fields = ["titolo", "descrizione", "contenuto", "immagine", 'autore_articolo', 'slug']
+        fields = ["titolo", "descrizione", "contenuto", "immagine", 'autore_articolo', 'sezione_appartenenza','slug']
         widgets = {"titolo": forms.TextInput(attrs={"placeholder": "Titolo dell'Articolo"})}
         labels = {"contenuto" : ""}
         

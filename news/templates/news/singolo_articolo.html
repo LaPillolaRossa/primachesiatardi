@@ -12,9 +12,9 @@
 <meta property="og:title" content="{{ articolo.titolo }}">
 <meta property="og:description" content="{{ articolo.descrizione }}">
 <meta property="og:type" content="articolo">
-<meta property="og:url" content="https://primachesiatardi.com{{ articolo.get_absolute_url }}">
+<meta property="og:url" content="https://www.primachesiatardi.com{{ articolo.get_absolute_url }}">
 {% if articolo.immagine %}
-<meta property="og:image" content="https://primachesiatardi.com{{ articolo.immagine.url }}">
+<meta property="og:image" content="https://www.primachesiatardi.com{{ articolo.immagine.url }}">
 {% endif %}
 {% endblock %}
 {% block content %}
@@ -23,7 +23,7 @@
 
 
 	{% if request.user.is_staff %}
-	<div class="card-body pl-0 mt-2 text-end">
+	<div class="card-body pl-0 my-2 text-end">
 		<a class="btn btn-sm btn-danger mt-2" href="{% url 'aggiorna_articolo' articolo.slug %}">Aggiorna</a>
 		<a class="btn btn-sm btn-danger mt-2" href="{% url 'cancella_articolo' articolo.slug %}">Elimina</a>
 	</div>
@@ -35,7 +35,7 @@
 
 					<hr>
 					<p>{{ articolo.data_creazione }}</p>
-					<p>Pubblicato da: <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p>
+					<p>Pubblicato da <a class="link-danger" href="{% url 'user_profile' username=articolo.autore_articolo.username %}">{{ articolo.autore_articolo }}</a></p>
 			        <p class="card-text mb-auto">
 					  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 18 20">
 						<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -44,10 +44,8 @@
 					</p>
 					<hr>
 					{% if articolo.immagine %}
-					<img src="{{ articolo.immagine.url }}" class="col-md-5 float-md-end " width="100%" height="300px"
-						alt="{{ articolo.titolo }}">
-					<hr>
-
+					<img src="{{ articolo.immagine.url }}" class="col-md-5 float-md-end mb-2" width="100%" alt="{{ articolo.titolo }}">
+					
 					{% else %}
 
 					{% endif %}
@@ -57,7 +55,7 @@
 	
 				<div class="row my-2">
 					<div class="col-6 col-sm-6 align-self-start">
-					<button type="button" class="btn btn-sm btn-secondary position-relative">
+					<button type="button" class="btn btn-sm btn-secondary position-relative mb-4">
 						Mi Piace
 						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
 							{{ numero_di_like_articolo }}
@@ -102,8 +100,7 @@
 							<p class="text-muted mb-0">
 								{{ commento.data_creazione|date:"d M Y" }}
 								{% if request.user == commento.autore_commento %}
-								<a href="{% url 'cancella_commento' id=articolo.pk pk=commento.pk %}">|<i
-										class="fas fa-minus-circle"></i></a>
+								<a href="{% url 'cancella_commento' id=articolo.pk pk=commento.pk %}">|<i class="fas fa-minus-circle"></i></a>
 								{% endif %}
 							</p>
 						</div>
@@ -132,88 +129,31 @@
 				</div>
 				{% endif %}
 				
-			<div class="text-end">
-				<span class="step-links">
-					{% if commenti.has_previous %}
-					<a href="?pagina=1">&laquo; prima</a>
-					<a href="?pagina={{ commenti.previous_page_number }}">precedente</a>
-					{% endif %}
-			
-					<span class="current">
-						Pagina {{ commenti.number }} di {{ commenti.paginator.num_pages }}.
-					</span>
-			
-					{% if commenti.has_next %}
-					<a href="?pagina={{ commenti.next_page_number }}">successiva</a>
-					<a href="?pagina={{ commenti.paginator.num_pages }}">ultima &raquo;</a>
-					{% endif %}
-				</span>
-			</div>
-
-			</div>
-
-			<div class="col-md-4">
-				<h4 class="fst-italic text-center">Archivio</h4>
-					<li>2009
-						{% for articolo in archivio_2009 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>
-					<li>2010
-						{% for articolo in archivio_2010 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>
-					<li>2011
-						{% for articolo in archivio_2011 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>
-					<li>2012
-						{% for articolo in archivio_2012 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>
-					<li>2013
-						{% for articolo in archivio_2013 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>
-					<li>2014
-						{% for articolo in archivio_2014 %}
-						<ul>
-							<li>
-								<p><a href="{{ articolo.get_absolute_url }}">{{ articolo.titolo }}</a></p>
-							</li>
-						</ul>
-						{% endfor %}
-					</li>  
+				<div class="text-end">
+					<span class="step-links">
+						{% if commenti.has_previous %}
+						<a href="?pagina=1">&laquo; prima</a>
+						<a href="?pagina={{ commenti.previous_page_number }}">precedente</a>
+						{% endif %}
 				
-				</div>   
+						<span class="current">
+							Pagina {{ commenti.number }} di {{ commenti.paginator.num_pages }}.
+						</span>
+				
+						{% if commenti.has_next %}
+						<a href="?pagina={{ commenti.next_page_number }}">successiva</a>
+						<a href="?pagina={{ commenti.paginator.num_pages }}">ultima &raquo;</a>
+						{% endif %}
+					</span>
+				</div>
+			</div>
+			<div class="col-md-4" style="background-color: #CC0000; border-radius: 1%; flex: auto;">
+				<div class="p-4 my-3 bg-light rounded">	
+					{% include 'news/archivio.html' %}
+				</div>
 			</div>
 		</div>
 	</div>
-  </div>
 </div>
 
 {% endblock content %}

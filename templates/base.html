@@ -22,7 +22,8 @@
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
     <script src="{% static 'cookies/cookiebar.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'css/cookies.css' %}">
-	
+ 
+
   </head>
   <body>
 	  
@@ -85,23 +86,11 @@
                 Sezioni
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a
-                  class="dropdown-item"
-                  href="/news/sezione/2/"
-                  >Economia</a
-                >
-                <a class="dropdown-item" href="/news/sezione/3/"
-                  >Massoneria</a
-                >
-                <a class="dropdown-item" href="/news/sezione/11/"
-                  >Politica</a
-                >
-                <a class="dropdown-item" href="/news/sezione/1/"
-                  >Tecnologia</a
-                >
-                <a class="dropdown-item" href="/news/sezione/12/"
-                  >Sanità</a
-                >
+                <a class="dropdown-item" href="/news/economia/">Economia</a>
+                <a class="dropdown-item" href="/news/massoneria/">Massoneria</a>
+                <a class="dropdown-item" href="/news/politica/">Politica</a>
+                <a class="dropdown-item" href="/news/tecnologia/">Tecnologia</a>
+                <a class="dropdown-item" href="/news/sanita/">Sanità</a>
             </li>
             
             {% if request.user.is_authenticated %}
