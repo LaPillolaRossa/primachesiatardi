@@ -1,7 +1,8 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .forms import FormModelloContatto
-from .models import BlacklistIP, ModelloContatto
+from .models import BlacklistIP
 from django.core.mail import EmailMessage
 from smtplib import SMTPRecipientsRefused
 
@@ -20,15 +21,13 @@ def contatti(request):
         if BlacklistIP.objects.filter(ip__exact=ip):
             return HttpResponse("<h1>Internal server error (500)<h1>")
         form = FormModelloContatto(request.POST, request.FILES)
-        if request.POST.get('file', True):
-            ModelloContatto(file=request.FILES["file"])
         if form.is_valid():
             try:            
                 destinatario = form.cleaned_data["email"]            
                 email = EmailMessage(
                     "Richiesta di collaborazione",
                     """Ti ringraziamo per averci contattato. Visioneremo la tua proposta e ti contatteremo entro un massimo di 48 ore.""",
-                    "comunicazioni@primachesiatardi.com",
+                    settings.DEFAULT_FROM_EMAIL,
                     [destinatario],
                     headers={"Message-ID": "foo"},
                 )
@@ -43,14 +42,15 @@ def contatti(request):
             instance.user_agent = user_agent   
             instance.save()          
 
-            email_avviso = EmailMessage(
-                "Richiesta di collaborazione",
-                """Un utente ha inviato una richiesta di collaborazione. Puoi visionarne i dettagli all'interno dell'area amministrativa del sito. Di seguito il link per accedervi: https://www.primachesiatardi.com/admin/""",
-                "comunicazioni@primachesiatardi.com",
-                ["destinatario@example.com", "destinatario@example.com"],
-                headers={"Message-ID": "foo"},
-            )
-            email_avviso.send()              
+            if settings.CONTATTO_DESTINATARI:
+                email_avviso = EmailMessage(
+                    "Richiesta di collaborazione",
+                    f"""Un utente ha inviato una richiesta di collaborazione. Puoi visionarne i dettagli all'interno dell'area amministrativa del sito. Di seguito il link per accedervi: {request.build_absolute_uri('/admin/')}""",
+                    settings.DEFAULT_FROM_EMAIL,
+                    settings.CONTATTO_DESTINATARI,
+                    headers={"Message-ID": "foo"},
+                )
+                email_avviso.send()
             return redirect("/contattaci-successo")
     else:
         form = FormModelloContatto()

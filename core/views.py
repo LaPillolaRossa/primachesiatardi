@@ -7,7 +7,7 @@ import random
     
 def homepageview(request):
     lista_articoli_random = list(Articolo.objects.all())
-    random_articoli = random.sample(lista_articoli_random, 20)
+    random_articoli = random.sample(lista_articoli_random, min(20, len(lista_articoli_random)))
     sezioni = Sezione.objects.all()
     lista_articoli = Articolo.objects.all()
     ultimi_articoli = Articolo.objects.filter().order_by("-pk")
