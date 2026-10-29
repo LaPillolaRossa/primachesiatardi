@@ -204,6 +204,10 @@ SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 # Chi riceve l'avviso quando arriva una nuova richiesta dal form contatti
 CONTATTO_DESTINATARI = env_list('CONTATTO_DESTINATARI')
 
+# Canale Telegram su cui pubblicare i nuovi articoli (se mancano, la pubblicazione è disattivata)
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
+
 if os.environ.get('EMAIL_HOST'):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.environ['EMAIL_HOST']

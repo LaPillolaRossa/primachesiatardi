@@ -5,7 +5,8 @@ Sito di informazione sviluppato in Django nel 2023 e pubblicato in produzione su
 ## Funzionalità
 
 - **Articoli e sezioni**: editor CKEditor con caricamento di immagini e video YouTube, URL leggibili basati sullo slug, ricerca nel testo.
-- **SEO**: sitemap XML generata automaticamente e analisi delle pagine con django-check-seo.
+- **Telegram**: ogni nuovo articolo viene pubblicato automaticamente su un canale tramite la Bot API.
+- **SEO**: sitemap XML generata automaticamente, `robots.txt` e analisi delle pagine con django-check-seo.
 - **Utenti**: registrazione, login e recupero password; gli utenti registrati possono commentare e mettere "mi piace", mentre gli articoli li pubblica solo lo staff.
 - **Statistiche**: contatore delle visite per articolo con django-hitcount.
 - **Calendario eventi**: FullCalendar con creazione, modifica ed eliminazione degli eventi direttamente dal calendario.

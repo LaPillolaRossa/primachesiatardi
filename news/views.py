@@ -1,14 +1,22 @@
+import logging
+
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
+from django.utils.html import strip_tags
 from .forms import ArticoloModelForm, CommentoModelForm
 from hitcount.utils import get_hitcount_model
 from hitcount.views import HitCountMixin
 from .mixins import StaffMixing
 from .models import Articolo, Commento, Sezione
+
+import requests
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
     
@@ -70,20 +78,6 @@ def visualizza_articolo(request, slug):
 def staff_required(login_url=None):
     return user_passes_test(lambda u: u.is_staff, login_url=login_url)
 
-    
-@staff_required(login_url="/accounts/login")
-def crea_articolo(request):
-    if request.method == "POST":
-        form = ArticoloModelForm(request.POST)
-        if form.is_valid():
-            articolo = form.save(commit=False) # Si sospende temporaneamente la creazione dell'oggetto per aggiungere attributi aggiuntivi
-            articolo.autore_articolo = request.user
-            articolo.save()
-            return HttpResponseRedirect(articolo.get_absolute_url()) 
-    else:
-        form = ArticoloModelForm()
-    context = {"form": form}
-    return render(request, "news/crea_articolo.html", context)
 
 
 class AggiornaArticolo(StaffMixing, UpdateView):
@@ -228,6 +222,66 @@ def aggiungi_like_articolo(request, slug):
 
 
 
+def invio_articolo_su_telegram(titolo_articolo, url_articolo, contenuto, immagine_url):
+    """Pubblica l'articolo sul canale Telegram. Un errore di Telegram non blocca la creazione dell'articolo."""
+    bot_token = settings.TELEGRAM_BOT_TOKEN
+    chat_id = settings.TELEGRAM_CHAT_ID
+    if not bot_token or not chat_id:
+        return None
+
+    # Testo semplice: con MarkdownV2 ogni punto o trattino andrebbe preceduto da "\"
+    messaggio = f"{titolo_articolo}\n{url_articolo}\n\n{contenuto}"
+    api = f'https://api.telegram.org/bot{bot_token}'
+
+    try:
+        if immagine_url:
+            # La didascalia di una foto può avere al massimo 1024 caratteri
+            response = requests.post(f'{api}/sendPhoto', data={
+                'chat_id': chat_id,
+                'photo': immagine_url,
+                'caption': messaggio[:1024],
+            }, timeout=10)
+        else:
+            # Un messaggio di testo può avere al massimo 4096 caratteri
+            response = requests.post(f'{api}/sendMessage', data={
+                'chat_id': chat_id,
+                'text': messaggio[:4096],
+            }, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException:
+        logger.exception("Invio dell'articolo su Telegram non riuscito")
+        return None
 
 
-    
+
+
+@staff_required(login_url="/accounts/login")
+def crea_articolo(request):
+    if request.method == "POST":
+        form = ArticoloModelForm(request.POST, request.FILES)  # Aggiungi request.FILES per il campo immagine
+        if form.is_valid():
+            # Salva l'articolo senza commettere immediatamente per aggiungere il valore autore
+            articolo = form.save(commit=False)
+            articolo.autore_articolo = request.user
+            articolo.save()  # Ora salva l'articolo nel database
+
+            # Dopo aver salvato l'articolo, invia il messaggio su Telegram.
+            # Telegram ha bisogno di URL completi, con il dominio, per aprire il link e scaricare l'immagine.
+            url_articolo = request.build_absolute_uri(articolo.get_absolute_url())
+            contenuto = strip_tags(articolo.contenuto)  # il contenuto arriva da CKEditor in HTML
+
+            immagine_url = None
+            if articolo.immagine:
+                immagine_url = request.build_absolute_uri(articolo.immagine.url)
+
+            # Invia il messaggio su Telegram (titolo, contenuto, URL e immagine se presente)
+            invio_articolo_su_telegram(articolo.titolo, url_articolo, contenuto, immagine_url)
+
+            # Redirigi all'articolo appena creato
+            return HttpResponseRedirect(articolo.get_absolute_url())
+    else:
+        form = ArticoloModelForm()
+
+    context = {"form": form}
+    return render(request, "news/crea_articolo.html", context)
