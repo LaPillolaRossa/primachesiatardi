@@ -24,6 +24,3 @@ def registrazione_view(request):
         form = FormRegistrazione()
     context = {"form": form}
     return render(request, "accounts/registrazione.html", context)
-
-
-    

@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404, render, redirect
 from news.models import Articolo, Commento, Sezione
 import random
 # Create your views here.
-
     
 def homepageview(request):
     lista_articoli_random = list(Articolo.objects.all())
@@ -46,4 +45,13 @@ def cerca(request):
 
 def cookies_view(request):
     return render(request, "cookies/cookies.html")
+
+def robots_txt(request):
+    template = "core/robots.txt"
+    context = {}
+    return render(request, template, context, content_type="text/plain")
+
+
+
+
 

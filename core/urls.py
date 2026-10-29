@@ -1,3 +1,4 @@
+from core.views import robots_txt
 from django.urls import path
 
 from . import views
@@ -9,5 +10,5 @@ urlpatterns = [
     path('user/<str:username>/', views.user_profile_view, name="user_profile"),
     path('cerca/', views.cerca, name="funzione_cerca"),
     path('cookies/', views.cookies_view, name="cookies"),
-    
+    path("robots.txt", robots_txt, name="robots"),
 ]
