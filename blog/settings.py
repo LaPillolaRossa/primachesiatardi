@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -17,20 +18,33 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# Carica le variabili dal file .env, se presente, senza sovrascrivere quelle già impostate
+_env_file = BASE_DIR / '.env'
+if _env_file.exists():
+    for _riga in _env_file.read_text(encoding='utf-8').splitlines():
+        _riga = _riga.strip()
+        if _riga and not _riga.startswith('#') and '=' in _riga:
+            _chiave, _valore = _riga.split('=', 1)
+            if _valore.strip():
+                os.environ.setdefault(_chiave.strip(), _valore.strip())
+
+
+def env_list(name, default=""):
+    """Legge una variabile d'ambiente con più valori separati da virgola."""
+    return [v.strip() for v in os.environ.get(name, default).split(",") if v.strip()]
+
+
+# Tutti i valori sensibili arrivano da variabili d'ambiente: vedi .env.example
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rimossa-dalla-storia'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'solo-per-sviluppo-non-usare-in-produzione')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-#ALLOWED_HOSTS = ['*', 'testserver']
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
-ALLOWED_HOSTS = ['www.primachesiatardi.com']
-
-CSRF_TRUSTED_ORIGINS = ['https://www.primachesiatardi.com']
+CSRF_TRUSTED_ORIGINS = env_list('DJANGO_CSRF_TRUSTED_ORIGINS')
 
 # Application definition
 
@@ -63,8 +77,12 @@ INSTALLED_APPS = [
 
 ]
 
-RECAPTCHA_PUBLIC_KEY = 'rimossa-dalla-storia'
-RECAPTCHA_PRIVATE_KEY = 'rimossa-dalla-storia'
+# Senza chiavi, django-recaptcha usa le chiavi di test di Google (valide solo in sviluppo)
+if os.environ.get('RECAPTCHA_PUBLIC_KEY'):
+    RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
+    RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_PRIVATE_KEY']
+else:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 SITE_ID = 1
 
@@ -125,31 +143,26 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Configurazione Database Sviluppo
+# PostgreSQL se DB_NAME è impostata, altrimenti SQLite per lo sviluppo locale
 
-#DATABASES = {
-#    'default': {
-#       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#       'USER': 'rimosso-dalla-storia',
-#       'NAME': 'marco',
-#       'HOST': 'rimosso-dalla-storia',
-#       'PASSWORD': 'rimossa-dalla-storia',
-#       'PORT': '',
-#   },
-#}
-
-# Configurazione Database Produzione
-
-DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'USER': 'rimosso-dalla-storia',
-       'NAME': 'primachesiatardi_5844702411',
-       'HOST': 'rimosso-dalla-storia',
-       'PASSWORD': 'rimossa-dalla-storia',
-       'PORT': '',
-   },
-}
+if os.environ.get('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ.get('DB_USER', ''),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', ''),
+        },
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+    }
 
 
 # Password validation
@@ -182,31 +195,24 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Configurazione Invio Mail Sviluppo
+# Invio mail: SMTP se EMAIL_HOST è impostata, altrimenti le mail vengono stampate in console
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 
-#EMAIL_USE_SSL = True
-#EMAIL_HOST = 'smtp.libero.it'
-#EMAIL_PORT = 465
-#EMAIL_HOST_USER = 'rimosso-dalla-storia'
-#EMAIL_HOST_PASSWORD = 'rimossa-dalla-storia'
+# Chi riceve l'avviso quando arriva una nuova richiesta dal form contatti
+CONTATTO_DESTINATARI = env_list('CONTATTO_DESTINATARI')
 
-# Configurazione Invio Mail Produzione
-
-SERVER_EMAIL = 'destinatario@example.com'
-
-DEFAULT_FROM_EMAIL = 'comunicazioni@primachesiatardi.com'
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtps.aruba.it'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'rimosso-dalla-storia'
-EMAIL_HOST_PASSWORD = 'rimossa-dalla-storia'
+if os.environ.get('EMAIL_HOST'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ['EMAIL_HOST']
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '465'))
+    EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'True') == 'True'
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -220,7 +226,7 @@ STATICFILES_DIRS = [
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = '/home/primachesiatardi/static-serve/'
+STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT', BASE_DIR / 'static-serve')
 
 MEDIA_ROOT = BASE_DIR / 'media-serve/'
 
